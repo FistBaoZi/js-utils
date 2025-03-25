@@ -126,3 +126,30 @@ function getInputByLabel(labelValue) {
     // 未找到时返回 null
     return null;
 }
+ /**
+ * 根据厂站名称选择对应的 span 标签并触发点击事件
+ * @param {string} stationName - 厂站名称
+ */
+function clickStationSpan(stationName) {
+    // 获取目标 ul 元素
+    const ulElement = document.querySelectorAll('.el-select-dropdown ul')[1];
+
+    if (!ulElement) {
+        console.error('未找到指定的 ul 元素');
+        return;
+    }
+
+    // 获取 ul 下所有 li 标签的 span 标签
+    const spanElements = ulElement.querySelectorAll('li span');
+
+    // 遍历 span 标签，寻找内容为指定厂站名称的 span
+    const targetSpan = Array.from(spanElements).find(span => span.textContent.trim() === stationName);
+
+    if (targetSpan) {
+        // 触发点击事件
+        targetSpan.click();
+        console.log(`已触发点击事件，目标厂站名称：${stationName}`);
+    } else {
+        console.error(`未找到厂站名称为 "${stationName}" 的 span 标签`);
+    }
+}
