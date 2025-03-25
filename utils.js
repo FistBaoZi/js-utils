@@ -271,3 +271,39 @@ function getIconByLabel(labelValue) {
     return null;
 }
 
+/**
+ * 根据指定值查找表格中符合条件的 tr 标签，获取合同编号对应的tr标签
+ * @param {string} tableSelector - table 的选择器
+ * @param {string} value - 需要匹配的值
+ * @returns {HTMLTableRowElement | null} - 返回目标 tr 元素，如果未找到则返回 null
+ */
+function getTableRowBySecondTdValue(value) {
+    // 获取目标 table 元素
+    const table = document.querySelectorAll('.dialog-body table')[1];
+
+    if (!table) {
+        console.error('未找到指定的 table 元素');
+        return null;
+    }
+
+    // 遍历 tbody 中的所有 tr
+    const rows = table.querySelectorAll('tbody tr');
+
+    for (const row of rows) {
+        // 获取 tr 中的第二个 td
+        const secondTd = row.querySelectorAll('td')[1];
+
+        if (secondTd) {
+            // 获取第二个 td 下最后一层 div 的值
+            
+            const lastDiv = secondTd.querySelector('div:last-child');
+            console.log(lastDiv)
+            if (lastDiv && lastDiv.textContent.trim() === value) {
+                return row; // 返回匹配的 tr 元素
+            }
+        }
+    }
+
+    // 未找到符合条件的 tr
+    return null;
+}
