@@ -336,12 +336,3 @@ function getButtonByZIndex2022AndSpanValue(spanValue) {
         return null;
     }
 }
-
-// 示例：调用函数并传入指定的 span 值
-const button = getButtonByZIndexAndSpanValue('指定的值');
-if (button) {
-    console.log('目标按钮:', button);
-} else {
-    console.log('未找到目标按钮');
-}
-
