@@ -345,12 +345,3 @@ function getButtonByMaxZIndexAndSpanValue(spanValue) {
         return null;
     }
 }
-
-// 示例：调用函数并传入指定的 span 值
-const button = getButtonByMaxZIndexAndSpanValue('新增');
-if (button) {
-    console.log('目标按钮:', button);
-} else {
-    console.log('未找到目标按钮');
-}
-
