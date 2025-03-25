@@ -100,9 +100,9 @@ async function convertExcelToArray(file) {
 }
 
 /**
- * 根据 label 的文本值找到同级节点中的 input 标签
+ * 根据指定的 label 文本值，获取同级 div 标签下的 i 标签
  * @param {string} labelValue - label 的文本值
- * @returns {HTMLInputElement | null} - 返回对应的 input 标签，如果未找到则返回 null
+ * @returns {HTMLElement | null} - 返回目标 i 标签，如果未找到则返回 null
  */
 function getIconByLabel(labelValue) {
     // 查找所有 div 下的 label 标签
@@ -235,12 +235,13 @@ function getButtonBySpanText(spanText) {
     }
 }
 
+
 /**
- * 根据指定的 label 文本值，获取同级 div 标签下的 i 标签
+ * 根据 label 的文本值找到同级节点中的 input 标签
  * @param {string} labelValue - label 的文本值
- * @returns {HTMLElement | null} - 返回目标 i 标签，如果未找到则返回 null
+ * @returns {HTMLInputElement | null} - 返回对应的 input 标签，如果未找到则返回 null
  */
-function getIconByLabel(labelValue) {
+function getInputByLabel(labelValue) {
     // 查找所有 div 下的 label 标签
     const labelElement = Array.from(document.querySelectorAll('div label')).find(
         label => label.textContent.trim() === labelValue
@@ -251,10 +252,10 @@ function getIconByLabel(labelValue) {
         const siblingDiv = labelElement.parentElement.querySelector('div');
 
         if (siblingDiv) {
-            // 查找同级 div 下的 i 标签
-            const iconElement = siblingDiv.querySelector('i');
-            if (iconElement) {
-                return iconElement; // 返回目标 i 标签
+            // 查找同级 div 中的 input 标签
+            const inputElement = siblingDiv.querySelector('input');
+            if (inputElement) {
+                return inputElement; // 返回目标 input 标签
             }
         }
     }
@@ -262,6 +263,7 @@ function getIconByLabel(labelValue) {
     // 未找到时返回 null
     return null;
 }
+
 
 /**
  * 根据指定值查找表格中符合条件的 tr 标签，获取合同编号对应的tr标签
