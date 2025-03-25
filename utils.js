@@ -300,48 +300,41 @@ function getTableRowBySecondTdValue(value) {
 }
 
 /**
- * 获取 z-index 最大且不为 9999 的 div 下的按钮，其中按钮包含的 span 标签值与指定值匹配
- * @param {string} spanValue - 需要匹配的 span 标签的文本值
+ * 获取指定弹出中的按钮
+ * @param {string} divValue - 弹窗标题
+ * @param {string} spanValue - 按钮文字
  * @returns {HTMLButtonElement | null} - 返回符合条件的按钮元素，如果未找到则返回 null
  */
-function getButtonByMaxZIndexAndSpanValue(spanValue) {
-    if (!spanValue) {
-        throw new Error("spanValue 参数不能为空");
-    }
+function findButtonByCriteria(divValue, spanValue) {
+    // 获取所有具有指定 class 的 div
+    const divElements = document.querySelectorAll('.dialog-title');
 
-    // 获取所有 div 元素
-    const divElements = Array.from(document.querySelectorAll('div'));
+    for (const div of divElements) {
+        if (div.textContent === divValue) {
+            // 找到该 div 的父元素
+            const parent = div.parentElement;
 
-    // 找到 z-index 最大但不为 9999 的 div 元素
-    const maxZIndexDiv = divElements.reduce((maxElement, currentElement) => {
-        const currentZIndex = parseInt(getComputedStyle(currentElement).zIndex) || 0;
-        const maxZIndex = parseInt(getComputedStyle(maxElement).zIndex) || 0;
+            if (parent) {
+                // 获取父元素的所有同级元素
+                const siblings = parent.parentElement ? parent.parentElement.children : [];
 
-        // 排除 z-index 为 9999 的元素
-        if (currentZIndex === 9999) return maxElement;
+                for (const sibling of siblings) {
+                    if (sibling.tagName.toLowerCase() === 'footer') {
+                        // 获取 footer 下的所有 button 元素
+                        const buttons = sibling.querySelectorAll('button');
 
-        return currentZIndex > maxZIndex ? currentElement : maxElement;
-    }, divElements[0]);
-
-    if (maxZIndexDiv) {
-        console.log("找到 z-index 最大（且不为 9999）的 div 元素:", maxZIndexDiv);
-
-        // 查找该 div 元素下的所有按钮
-        const buttonElements = maxZIndexDiv.querySelectorAll('button');
-
-        // 遍历按钮，寻找包含 span 且值符合条件的按钮
-        for (const button of buttonElements) {
-            const span = button.querySelector('span');
-            if (span && span.textContent.trim() === spanValue) {
-                console.log(`找到符合条件的按钮，span 值为 "${spanValue}"`);
-                return button; // 返回符合条件的按钮
+                        for (const button of buttons) {
+                            // 检查 button 下的 span 的值
+                            const span = button.querySelector('span');
+                            if (span && span.textContent === spanValue) {
+                                return button; // 返回符合条件的 button
+                            }
+                        }
+                    }
+                }
             }
         }
-
-        console.warn(`未找到 span 值为 "${spanValue}" 的按钮`);
-        return null;
-    } else {
-        console.error("未找到任何符合条件的 div 元素");
-        return null;
     }
+
+    return null; // 如果找不到符合条件的 button，返回 null
 }
