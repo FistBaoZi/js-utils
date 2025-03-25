@@ -212,14 +212,3 @@ function getPreviousMonth(currentMonth) {
     const previousMonth = String(previousDate.getMonth() + 1).padStart(2, '0'); // 月份加 1 并补零
     return `${previousYear}-${previousMonth}`;
 }
-
-// 示例：获取上一个月的字符串
-const inputElement = getInputByLabel('记账月份');
-const currentMonth = inputElement ? inputElement.value : null;
-if (currentMonth) {
-    const previousMonth = getPreviousMonth(currentMonth);
-    console.log('上一个月的字符串:', previousMonth);
-} else {
-    console.log('未找到目标 input 元素或值为空');
-}
-
