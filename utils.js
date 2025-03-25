@@ -298,3 +298,50 @@ function getTableRowBySecondTdValue(value) {
     // 未找到符合条件的 tr
     return null;
 }
+
+/**
+ * 根据指定的 span 值，获取 z-index 等于 2022 的元素下的按钮
+ * @param {string} spanValue - span 标签的文本内容
+ * @returns {HTMLButtonElement | null} - 返回符合条件的按钮元素，如果未找到则返回 null
+ */
+function getButtonByZIndex2022AndSpanValue(spanValue) {
+    if (!spanValue) {
+        throw new Error("spanValue 参数不能为空");
+    }
+
+    // 查找 z-index 等于 2022 的元素
+    const targetElement = Array.from(document.querySelectorAll('*')).find(
+        el => getComputedStyle(el).zIndex === '2022'
+    );
+
+    if (targetElement) {
+        console.log("找到 z-index 为 2022 的元素:", targetElement);
+
+        // 查找该元素下的所有 button
+        const buttonElements = targetElement.querySelectorAll('button');
+
+        // 遍历按钮，寻找包含 span 且值符合条件的 button
+        for (const button of buttonElements) {
+            const span = button.querySelector('span');
+            if (span && span.textContent.trim() === spanValue) {
+                console.log(`找到符合条件的按钮，span 值为 "${spanValue}"`);
+                return button; // 返回符合条件的 button
+            }
+        }
+
+        console.warn(`未找到 span 值为 "${spanValue}" 的按钮`);
+        return null;
+    } else {
+        console.error("未找到 z-index 为 2022 的元素");
+        return null;
+    }
+}
+
+// 示例：调用函数并传入指定的 span 值
+const button = getButtonByZIndexAndSpanValue('指定的值');
+if (button) {
+    console.log('目标按钮:', button);
+} else {
+    console.log('未找到目标按钮');
+}
+
