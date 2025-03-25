@@ -300,39 +300,57 @@ function getTableRowBySecondTdValue(value) {
 }
 
 /**
- * 根据指定的 span 值，获取 z-index 等于 2022 的元素下的按钮
- * @param {string} spanValue - span 标签的文本内容
+ * 获取 z-index 最大且不为 9999 的 div 下的按钮，其中按钮包含的 span 标签值与指定值匹配
+ * @param {string} spanValue - 需要匹配的 span 标签的文本值
  * @returns {HTMLButtonElement | null} - 返回符合条件的按钮元素，如果未找到则返回 null
  */
-function getButtonByZIndex2022AndSpanValue(spanValue) {
+function getButtonByMaxZIndexAndSpanValue(spanValue) {
     if (!spanValue) {
         throw new Error("spanValue 参数不能为空");
     }
 
-    // 查找 z-index 等于 2022 的元素
-    const targetElement = Array.from(document.querySelectorAll('*')).find(
-        el => getComputedStyle(el).zIndex === '2022'
-    );
+    // 获取所有 div 元素
+    const divElements = Array.from(document.querySelectorAll('div'));
 
-    if (targetElement) {
-        console.log("找到 z-index 为 2022 的元素:", targetElement);
+    // 找到 z-index 最大但不为 9999 的 div 元素
+    const maxZIndexDiv = divElements.reduce((maxElement, currentElement) => {
+        const currentZIndex = parseInt(getComputedStyle(currentElement).zIndex) || 0;
+        const maxZIndex = parseInt(getComputedStyle(maxElement).zIndex) || 0;
 
-        // 查找该元素下的所有 button
-        const buttonElements = targetElement.querySelectorAll('button');
+        // 排除 z-index 为 9999 的元素
+        if (currentZIndex === 9999) return maxElement;
 
-        // 遍历按钮，寻找包含 span 且值符合条件的 button
+        return currentZIndex > maxZIndex ? currentElement : maxElement;
+    }, divElements[0]);
+
+    if (maxZIndexDiv) {
+        console.log("找到 z-index 最大（且不为 9999）的 div 元素:", maxZIndexDiv);
+
+        // 查找该 div 元素下的所有按钮
+        const buttonElements = maxZIndexDiv.querySelectorAll('button');
+
+        // 遍历按钮，寻找包含 span 且值符合条件的按钮
         for (const button of buttonElements) {
             const span = button.querySelector('span');
             if (span && span.textContent.trim() === spanValue) {
                 console.log(`找到符合条件的按钮，span 值为 "${spanValue}"`);
-                return button; // 返回符合条件的 button
+                return button; // 返回符合条件的按钮
             }
         }
 
         console.warn(`未找到 span 值为 "${spanValue}" 的按钮`);
         return null;
     } else {
-        console.error("未找到 z-index 为 2022 的元素");
+        console.error("未找到任何符合条件的 div 元素");
         return null;
     }
 }
+
+// 示例：调用函数并传入指定的 span 值
+const button = getButtonByMaxZIndexAndSpanValue('新增');
+if (button) {
+    console.log('目标按钮:', button);
+} else {
+    console.log('未找到目标按钮');
+}
+
