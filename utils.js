@@ -26,10 +26,7 @@ async function clickElement(element, delayInSeconds = 0) {
         throw new Error("HTML元素不能为空");
     }
 
-    // 触发点击事件
-    const clickEvent = new Event('click');
-    element.dispatchEvent(clickEvent);
-
+    element.click();
     // 判断是否需要等待
     if (delayInSeconds > 0) {
         await new Promise(resolve => setTimeout(resolve, delayInSeconds * 1000));
