@@ -242,3 +242,32 @@ function getButtonBySpanText(spanText) {
         return null;
     }
 }
+
+/**
+ * 根据指定的 label 文本值，获取同级 div 标签下的 i 标签
+ * @param {string} labelValue - label 的文本值
+ * @returns {HTMLElement | null} - 返回目标 i 标签，如果未找到则返回 null
+ */
+function getIconByLabel(labelValue) {
+    // 查找所有 div 下的 label 标签
+    const labelElement = Array.from(document.querySelectorAll('div label')).find(
+        label => label.textContent.trim() === labelValue
+    );
+
+    if (labelElement) {
+        // 获取 label 的同级节点 div
+        const siblingDiv = labelElement.parentElement.querySelector('div');
+
+        if (siblingDiv) {
+            // 查找同级 div 下的 i 标签
+            const iconElement = siblingDiv.querySelector('i');
+            if (iconElement) {
+                return iconElement; // 返回目标 i 标签
+            }
+        }
+    }
+
+    // 未找到时返回 null
+    return null;
+}
+
