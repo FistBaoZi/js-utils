@@ -153,3 +153,40 @@ function clickStationSpan(stationName) {
         console.error(`未找到厂站名称为 "${stationName}" 的 span 标签`);
     }
 }
+/**
+ * 设置元素值，并在最后触发回车事件
+ * @param {HTMLElement} element - 目标 HTML 元素
+ * @param {string} content - 要设置的文本内容
+ * @param {number} delayInSeconds - 可选，等待时间（秒）
+ */
+async function setElementValueWithEnter(element, content, delayInSeconds = 0) {
+    if (!element) {
+        throw new Error("HTML 元素不能为空");
+    }
+
+    // 判断元素类型并设置内容
+    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+        element.value = content;
+    } else {
+        element.innerHTML = content;
+    }
+
+    // 触发输入事件
+    const inputEvent = new Event('input');
+    element.dispatchEvent(inputEvent);
+
+    // 判断是否需要等待
+    if (delayInSeconds > 0) {
+        await new Promise(resolve => setTimeout(resolve, delayInSeconds * 1000));
+    }
+
+    // 触发回车（Enter）事件
+    const enterEvent = new KeyboardEvent('keydown', {
+        key: 'Enter',
+        code: 'Enter',
+        keyCode: 13, // Enter 键的键码
+        bubbles: true,
+    });
+    element.dispatchEvent(enterEvent);
+    console.log(`设置值为 "${content}"，并触发回车事件`);
+}
