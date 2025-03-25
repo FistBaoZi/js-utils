@@ -212,3 +212,33 @@ function getPreviousMonth(currentMonth) {
     const previousMonth = String(previousDate.getMonth() + 1).padStart(2, '0'); // 月份加 1 并补零
     return `${previousYear}-${previousMonth}`;
 }
+/**
+ * 根据指定的文本查找 span 标签，并返回对应的父级按钮元素
+ * @param {string} spanText - span 标签的文本内容
+ * @returns {HTMLButtonElement | null} - 返回目标按钮元素，如果未找到则返回 null
+ */
+function getButtonBySpanText(spanText) {
+    // 验证参数
+    if (!spanText) {
+        throw new Error("spanText 参数不能为空");
+    }
+
+    // 查找所有的 span 标签
+    const spanElement = Array.from(document.querySelectorAll('span')).find(
+        span => span.textContent.trim() === spanText
+    );
+
+    if (spanElement) {
+        // 获取 span 的父级 button 元素
+        const buttonElement = spanElement.closest('button');
+        if (buttonElement) {
+            return buttonElement; // 返回按钮元素
+        } else {
+            console.error(`未找到包含 "${spanText}" 的 span 标签对应的父级 button 元素`);
+            return null;
+        }
+    } else {
+        console.error(`未找到文本内容为 "${spanText}" 的 span 标签`);
+        return null;
+    }
+}
