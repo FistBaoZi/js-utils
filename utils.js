@@ -104,23 +104,15 @@ async function convertExcelToArray(file) {
  * @param {string} labelValue - label 的文本值
  * @returns {HTMLInputElement | null} - 返回对应的 input 标签，如果未找到则返回 null
  */
-function getInputByLabel(labelValue) {
+function getIconByLabel(labelValue) {
     // 查找所有 div 下的 label 标签
-    const labelElement = Array.from(document.querySelectorAll('div label')).find(
+    const labelElement = Array.from(document.querySelectorAll('div .el-form-item__label')).find(
         label => label.textContent.trim() === labelValue
     );
 
     if (labelElement) {
         // 获取 label 的同级节点 div
-        const siblingDiv = labelElement.parentElement.querySelector('div');
-
-        if (siblingDiv) {
-            // 查找同级 div 中的 input 标签
-            const inputElement = siblingDiv.querySelector('input');
-            if (inputElement) {
-                return inputElement; // 返回目标 input 标签
-            }
-        }
+        return  labelElement.parentElement.querySelector('div i');
     }
 
     // 未找到时返回 null
