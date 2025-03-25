@@ -190,3 +190,36 @@ async function setElementValueWithEnter(element, content, delayInSeconds = 0) {
     element.dispatchEvent(enterEvent);
     console.log(`设置值为 "${content}"，并触发回车事件`);
 }
+
+/**
+ * 获取指定月份的上一个月的字符串
+ * @param {string} currentMonth - 当前月份的字符串（格式：YYYY-MM）
+ * @returns {string} - 上一个月的字符串（格式：YYYY-MM）
+ */
+function getPreviousMonth(currentMonth) {
+    if (!currentMonth) {
+        throw new Error("当前月份不能为空");
+    }
+
+    // 将字符串分割为年和月
+    const [year, month] = currentMonth.split('-').map(Number);
+
+    // 计算上一个月的日期
+    const previousDate = new Date(year, month - 2, 1); // 月份基于零索引（0 = 1月）
+
+    // 格式化为 YYYY-MM 字符串
+    const previousYear = previousDate.getFullYear();
+    const previousMonth = String(previousDate.getMonth() + 1).padStart(2, '0'); // 月份加 1 并补零
+    return `${previousYear}-${previousMonth}`;
+}
+
+// 示例：获取上一个月的字符串
+const inputElement = getInputByLabel('记账月份');
+const currentMonth = inputElement ? inputElement.value : null;
+if (currentMonth) {
+    const previousMonth = getPreviousMonth(currentMonth);
+    console.log('上一个月的字符串:', previousMonth);
+} else {
+    console.log('未找到目标 input 元素或值为空');
+}
+
