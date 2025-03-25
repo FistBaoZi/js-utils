@@ -35,12 +35,13 @@ async function clickElement(element, delayInSeconds = 0) {
         await new Promise(resolve => setTimeout(resolve, delayInSeconds * 1000));
     }
 }
+// 使用 SheetJS 解析 Excel 文件
 async function convertExcelToArray(file) {
     if (!file) {
         throw new Error("文件不能为空");
     }
 
-    // 动态加载 SheetJS 库（确保前面已通过 @require 引入）
+    // 动态加载 SheetJS 库
     if (typeof XLSX === "undefined") {
         throw new Error("需要引入 SheetJS 库 (XLSX)");
     }
@@ -61,9 +62,30 @@ async function convertExcelToArray(file) {
                 // 获取第一个工作表内容
                 const sheet = workbook.Sheets[sheetName];
 
-                // 将工作表内容转换为 JSON 数组
-                const array = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                resolve(array);
+                // 将工作表内容转换为二维数组
+                const rawArray = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                // 判断数据是否为空
+                if (rawArray.length < 2) {
+                    throw new Error("Excel 数据不足，至少需要两行数据！");
+                }
+
+                // 获取第一行作为键名
+                const names = rawArray[0];
+
+                // 从第二行开始作为值
+                const values = rawArray.slice(1);
+
+                // 构造键值对数组
+                const result = values.map(row => {
+                    const entry = {};
+                    names.forEach((name, index) => {
+                        entry[name] = row[index] !== undefined ? row[index] : null;
+                    });
+                    return entry;
+                });
+
+                resolve(result);
             } catch (error) {
                 reject(error);
             }
